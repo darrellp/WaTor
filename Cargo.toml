@@ -1,0 +1,15 @@
+[package]
+name = "wator"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+pancurses = "0.16"
+rand = "0.8.4"
+min-max = "0.1"
+lazy_static = "1.4.0"
+
+[dependencies.cursive]
+version = "0.16.3"
+default-features = false
+features = ["pancurses-backend"]
