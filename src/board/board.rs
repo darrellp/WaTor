@@ -139,13 +139,12 @@ impl<const W: usize, const H: usize> Board<W, H> {
         let mut candidate_cols = [0; 8];
         let mut fish_rows = [0; 8];
         let mut fish_cols = [0; 8];
-        let lcol = if col == 0 { 0 } else { col - 1 };
-        let ucol = if col == W - 1 { W - 1 } else { col + 1 };
-        let lrow = if row == 0 { 0 } else { row - 1 };
-        let urow = if row == W - 1 { W - 1 } else { row + 1 };
 
-        for col_neighbor in lcol..=ucol {
-            for row_neighbor in lrow..=urow {
+        for col_neighbor_safe in W + col - 1..=W + col + 1 {
+            for row_neighbor_safe in H + row - 1..=H + row + 1 {
+                let col_neighbor = col_neighbor_safe % W;
+                let row_neighbor = row_neighbor_safe % H;
+
                 if (row_neighbor, col_neighbor) == (row, col) {
                     continue;
                 }
@@ -174,7 +173,7 @@ impl<const W: usize, const H: usize> Board<W, H> {
         }
     }
 
-    fn advance(&mut self) {
+    pub fn advance(&mut self) {
         let mut rng = rand::thread_rng();
 
         // Count frames so we know who belongs to what frame
@@ -233,7 +232,10 @@ impl<const W: usize, const H: usize> Board<W, H> {
                             self.cells[new_row][new_col] = Cell::Shark(new_energy, new_repo, a + 1);
                             if (new_repo == 0) {
                                 // Baby is left behind
-                                self.cells[row][col] = Cell::Shark(self.shark_energy, 0, a + 1);
+                                let new_repo = rand::thread_rng().gen_range(0..self.shark_repo);
+                                //let new_repo = 0;
+                                self.cells[row][col] =
+                                    Cell::Shark(self.shark_energy, new_repo, a + 1);
                             } else {
                                 self.cells[row][col] = Cell::Empty;
                             }

@@ -7,6 +7,6 @@ mod wator_cursive;
 
 fn main() {
     let mut siv = cursive::default();
-    wator_cursive::wator_cursive::setup(&mut siv);
+    wator_cursive::wator_cursive::run(&mut siv);
     siv.run()
 }
