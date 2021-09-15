@@ -21,6 +21,7 @@ pub struct Board<const W: usize, const H: usize> {
     shark_repo: usize,
     shark_boost: usize,
     advances: usize,
+    use_4_neighborhood: bool,
 }
 
 #[allow(unused)]
@@ -55,6 +56,7 @@ impl<const W: usize, const H: usize> Board<W, H> {
             shark_repo,
             shark_boost,
             advances: 0,
+            use_4_neighborhood: true,
         }
     }
 
@@ -111,6 +113,10 @@ impl<const W: usize, const H: usize> Board<W, H> {
             for row_neighbor_safe in H + row - 1..=H + row + 1 {
                 let col_neighbor = col_neighbor_safe % W;
                 let row_neighbor = row_neighbor_safe % H;
+                if (self.use_4_neighborhood && col_neighbor != col && row_neighbor != row) {
+                    // Don't use diagonals
+                    continue;
+                }
 
                 if (row_neighbor, col_neighbor) == (row, col) {
                     continue;
@@ -144,6 +150,10 @@ impl<const W: usize, const H: usize> Board<W, H> {
             for row_neighbor_safe in H + row - 1..=H + row + 1 {
                 let col_neighbor = col_neighbor_safe % W;
                 let row_neighbor = row_neighbor_safe % H;
+                if (self.use_4_neighborhood && col_neighbor != col && row_neighbor != row) {
+                    // Don't use diagonals
+                    continue;
+                }
 
                 if (row_neighbor, col_neighbor) == (row, col) {
                     continue;
